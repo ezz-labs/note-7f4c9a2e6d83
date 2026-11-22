@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>يا بسبوسة ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing:border-box; }
+html,body { margin:0; width:100%; height:100%; overflow:hidden; }
+body { font-family:'Cairo',system-ui,sans-serif; background:#030205; color:#fff; display:grid; place-items:center; transition:background 1.5s; touch-action:manipulation; }
+body.on { background:radial-gradient(ellipse at 50% 35%,#681638,#320b20 50%,#160610); }
+#btn { z-index:5; font:700 1.5rem 'Cairo',sans-serif; color:#eee; background:#17131a; border:1px solid #514450; border-radius:99px; padding:18px 48px; cursor:pointer; box-shadow:0 0 40px #a879951a; transition:.7s; }
+body.on #btn { opacity:0; pointer-events:none; position:absolute; }
+h1 { display:none; z-index:3; color:#ffe0ec; font-size:clamp(2rem,9vw,4.5rem); text-align:center; text-shadow:0 0 25px #ff649f; }
+body.on h1 { display:block; }
+.heart { position:absolute; pointer-events:none; z-index:1; animation:up linear forwards; filter:drop-shadow(0 0 7px #ff6eaa); }
+@keyframes up { 0% { transform:translate(0,0) scale(.4); opacity:0; } 10% { opacity:1; } 100% { transform:translate(var(--x),var(--y)) scale(1) rotate(var(--r)); opacity:0; } }
+.burst { position:absolute; z-index:4; pointer-events:none; animation:pop 1.8s ease-out forwards; }
+@keyframes pop { to { transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.4); opacity:0; } }
+</style>
+</head>
+<body>
+<button id="btn" type="button">اضغط هنا</button>
+<h1 id="message" aria-live="polite"></h1>
+<script>
+(function(){
+ var btn=document.getElementById('btn'), msg=document.getElementById('message'), revealed=false;
+ var emojis=['❤️','💖','💕','💗','💓','💘','💝'];
+ function makeHeart(x,y,isBurst){
+  var heart=document.createElement('div'); heart.className=isBurst?'burst':'heart';
+  heart.textContent=emojis[Math.floor(Math.random()*emojis.length)]; heart.style.left=x+'px'; heart.style.top=y+'px';
+  heart.style.fontSize=(18+Math.random()*28)+'px';
+  heart.style.setProperty('--x',(isBurst?(Math.random()-.5)*innerWidth:Math.random()*160-80)+'px');
+  heart.style.setProperty('--y',(isBurst?(Math.random()-.5)*innerHeight:-innerHeight)+'px');
+  heart.style.setProperty('--r',(Math.random()*160-80)+'deg');
+  var duration=isBurst?1.5+Math.random()*1.4:5+Math.random()*5;
+  heart.style.animationDuration=duration+'s'; document.body.appendChild(heart);
+  setTimeout(function(){heart.remove();},duration*1000);
+ }
+ btn.addEventListener('click',function(){
+  if(revealed)return; revealed=true; document.body.classList.add('on');
+  var rect=btn.getBoundingClientRect(),x=rect.left+rect.width/2,y=rect.top+rect.height/2;
+  for(var i=0;i<80;i++)makeHeart(x,y,true);
+  for(var j=0;j<24;j++)setTimeout(function(){makeHeart(Math.random()*innerWidth,innerHeight,false);},j*90);
+  setInterval(function(){makeHeart(Math.random()*innerWidth,innerHeight,false);},400);
+  var letters=Array.from('بحبك يا لولو'),index=0;
+  (function type(){if(index<letters.length){msg.textContent+=letters[index++];setTimeout(type,160);}})();
+ });
+})();
+</script>
+</body>
+</html>
